@@ -1,16 +1,34 @@
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Banner from "./Banner";
 import OrderCard from "./OrderCard";
 import CookingCard from "./CookingCard";
 import ReadyCard from "./ReadyCard";
 import { toast } from "react-toastify";
 
+const randomColorGen = () =>{
+  return`
+  rgb(
+  ${parseInt(Math.random()*255)},
+  ${parseInt(Math.random()*255)},
+  ${parseInt(Math.random()*255)},
+  0.2
+  )
+  `
+}
+
 const OrderContainer = ({ orderPromise }) => {
   const data = use(orderPromise);
+
+    const[randomColor, setRandomColor] = useState(randomColorGen())
     const[orders, setOrders] = useState(data)
 //   console.log(orders);
     const [cookingItems, setCookingItems] = useState([])
     const [readyItems, setReadyItems] = useState([])
+
+    useEffect(()=>{
+      setRandomColor(randomColorGen());
+    },[readyItems, cookingItems])
+
     const handleOrder = (order) =>{
         console.log(order)
         const isExist = cookingItems.find(item=> item.id == order.id);
@@ -34,7 +52,7 @@ const OrderContainer = ({ orderPromise }) => {
         setOrders(remainingOrders)
     }
   return (
-    <div>
+    <div id="home" style={{backgroundColor: randomColor}}>
       <Banner readyTotal={readyItems.length} cookingTotal={cookingItems.length} orderTotal={orders.length}></Banner>
 
       <section className="w-11/12 mx-auto py-10 grid grid-cols-1 lg:grid-cols-12 gap-5">
